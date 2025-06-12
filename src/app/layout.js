@@ -1,4 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import SessionWrapper from "./components/SessionWrapper";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,7 +25,21 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+       <SessionWrapper>
+          {children}
+        </SessionWrapper>
+        <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        style={{ zIndex: 9999 }} 
+      />
       </body>
     </html>
   );
