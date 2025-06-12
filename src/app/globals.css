@@ -3,9 +3,6 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -24,3 +21,88 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background: linear-gradient(-45deg, #1e3a8a, #000000, #1e3a8a);
+  background-size: 200% 200%;
+  animation: gradient-x 6s ease infinite;
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.animate-border {
+  animation: border 4s linear infinite;
+}
+
+@keyframes border {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+.border-gradient {
+  background: 
+    linear-gradient(-45deg, #1e3a8a, #000000, #1e3a8a) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      #4755697a 80%,
+      #6366f1 86%,
+      #a5b4fc 90%,
+      #6366f1 94%,
+      #4755697a
+    ) border-box;
+  background-size: 200% 200%, cover;
+  background-position: 0% 50%, center;
+  animation: gradient-x 6s ease infinite, border 4s linear infinite;
+  border: 2px solid transparent;
+}
+
+.bottom-border-gradient {
+  position: relative;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+}
+
+.bottom-border-gradient::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 20%,
+    #6366f1 40%,
+    #a5b4fc 50%,
+    #6366f1 60%,
+    transparent 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: borderSlide 10s linear infinite;
+}
+
+@keyframes borderSlide {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
