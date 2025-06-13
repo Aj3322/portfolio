@@ -77,7 +77,7 @@ export default function SignupPage() {
 
     try {
       // Determine role based on admin password
-      const role = formData.adminPassword === process.env.NEXT_PUBLIC_ADMIN_PASSWORD ? 'admin' : 'user';
+      const role = formData.adminPassword === process.env.NEXT_PUBLIC_ADMIN_PASSWORD ? 'admin' : 'viewer';
       
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
