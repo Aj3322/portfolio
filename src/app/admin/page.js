@@ -82,7 +82,7 @@ export default function AdminDashboard() {
             <div className="min-h-full w-full p-4 transition-all duration-300">
               <div className="container mx-auto px-4 py-6">
                 {activeTab === "dashboard" && (
-                  <DashboardContent projects={projects} />
+                  <DashboardContent  projects={projects}  setActiveTab={setActiveTab} />
                 )}
                 {activeTab === "projects" && (
                   <ProjectsContent

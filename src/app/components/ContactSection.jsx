@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { FiMail, FiUser, FiMessageSquare, FiPhone, FiLoader, FiCheck } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import { FiMail, FiUser, FiMessageSquare, FiPhone, FiLoader, FiCheck, FiAlertTriangle } from 'react-icons/fi';
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -37,33 +37,26 @@ export default function ContactSection() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        toast.custom((t) => (
-          <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} 
-            max-w-md w-full bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg rounded-lg 
-            pointer-events-auto flex ring-1 ring-blue-500 ring-opacity-50 p-4`}>
-            <div className="flex-1 flex items-center">
-              <div className="flex-shrink-0 pt-0.5">
-                <FiCheck className="h-6 w-6 text-white" />
-              </div>
-              <div className="ml-3 flex-1">
-                <p className="text-sm font-medium text-white">Message Sent!</p>
-                <p className="mt-1 text-sm text-blue-100">
-                  Thank you for reaching out. I'll get back to you soon.
-                </p>
-              </div>
-            </div>
-          </div>
-        ));
+    if (response.ok) {
+ toast.success('Message Sent! Thank you for reaching out. I\'ll get back to you soon.', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  });
 
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: ''
-        });
-      } else {
+  // Reset form
+  setFormData({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+}else {
         throw new Error(data.message || 'Failed to send message');
       }
     } catch (error) {

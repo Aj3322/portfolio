@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FiMail, FiUser, FiMessageSquare, FiPhone, FiAlertTriangle, FiCheck } from 'react-icons/fi';
 
-export default function DashboardContent({ projects }) {
+export default function DashboardContent({ projects , setActiveTab }) {
   const [notifications, setNotifications] = useState([]);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState({
@@ -111,6 +111,9 @@ export default function DashboardContent({ projects }) {
     return date.toLocaleDateString();
   };
 
+
+  
+
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
@@ -158,54 +161,103 @@ export default function DashboardContent({ projects }) {
         </div>
       </div>
 
-      {/* Recent Projects */}
-      <div className="glass-panel p-6 rounded-xl border border-blue-900/30 bg-gradient-to-br from-blue-900/20 to-black/40 backdrop-blur-sm shadow-lg">
-        <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-blue-400 bg-clip-text text-transparent">Recent Projects</h2>
-        <div className="space-y-4">
-          {projects.slice(0, 3).map(project => (
-            <div key={project.id||project._id} className="p-4 rounded-lg bg-black/20 border border-blue-900/20 hover:border-blue-700/50 transition-colors">
-              <div className="flex justify-between items-center">
-                <h3 className="font-medium">{project.name}</h3>
-                <span className="text-xs text-gray-400">{new Date(project.createdAt).toLocaleDateString()}</span>
-              </div>
-              <p className="text-sm text-gray-400 mt-1 line-clamp-2">{project.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Notifications and Messages */}
+      {/* Recent Projects and Messages */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Notifications */}
+         {/* Recent Projects */}
         <div className="glass-panel p-6 rounded-xl border border-blue-900/30 bg-gradient-to-br from-blue-900/20 to-black/40 backdrop-blur-sm shadow-lg">
-          <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-blue-400 bg-clip-text text-transparent">Notifications</h2>
-          {loading.notifications ? (
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="p-3 rounded-lg bg-black/10 border border-blue-900/10 animate-pulse">
-                  <div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-700 rounded w-full"></div>
-                  <div className="h-2 bg-gray-700 rounded w-1/2 mt-2"></div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {notifications.map(notification => (
-                <div key={notification._id} className={`p-3 rounded-lg ${notification.read ? 'bg-black/10' : 'bg-blue-900/20'} border ${notification.read ? 'border-blue-900/10' : 'border-blue-700/50'}`}>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-medium">{notification.title}</h3>
-                      <p className="text-sm text-gray-400">{notification.message}</p>
-                    </div>
-                    {!notification.read && <span className="h-2 w-2 bg-blue-400 rounded-full animate-pulse"></span>}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">{formatRelativeTime(notification.createdAt)}</p>
-                </div>
-              ))}
-            </div>
-          )}
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-xl font-bold bg-gradient-to-r from-blue-300 to-blue-400 bg-clip-text text-transparent">
+      Recent Projects
+    </h2>
+    <button
+      onClick={() => setActiveTab('projects')}
+      className="text-xs text-blue-400 hover:text-blue-300 cursor-pointer"
+    >
+    <span className="flex items-center gap-1">
+      View All →
+    </span>
+    </button>
+
+  </div>
+  
+  <div className="grid grid-cols-1 gap-4">
+    {projects.slice(0, 3).map(project => (
+      <div 
+        key={project.id || project._id} 
+        className="group relative p-4 rounded-lg bg-gradient-to-br from-black/30 to-blue-900/20 border border-blue-900/30 hover:border-blue-500/50 transition-all duration-300 overflow-hidden"
+      >
+        {/* Project status badge */}
+        {project.status && (
+          <span className={`absolute top-3 right-3 text-xs px-2 py-1 rounded-full ${
+            project.status === 'public' 
+              ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+              : project.status === 'private'
+              ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+              : 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+          }`}>
+            {project.status}
+          </span>
+        )}
+        
+        {/* Project icon/category */}
+        <div className="h-10 w-10 rounded-lg bg-blue-900/30 flex items-center justify-center mb-3 group-hover:bg-blue-900/50 transition-colors">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-5 w-5 text-blue-400 group-hover:text-blue-300" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
         </div>
+        
+        <div className="space-y-2">
+          <div className="flex justify-between items-start">
+            <h3 className="font-medium text-white group-hover:text-blue-300 transition-colors">
+              {project.name}
+            </h3>
+          </div>
+          
+          <p className="text-sm text-gray-400 line-clamp-2 group-hover:text-gray-300 transition-colors">
+            {project.description}
+          </p>
+          
+          <div className="flex items-center justify-between pt-2">
+            <span className="text-xs text-gray-500">
+              {new Date(project.createdAt).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+              })}
+            </span>
+            
+            {project.technologies && (
+              <div className="flex space-x-1">
+                {project.technologies.slice(0, 2).map((tech, index) => (
+                  <span 
+                    key={index} 
+                    className="text-xs bg-blue-900/50 text-blue-300 px-2 py-1 rounded-full"
+                  >
+                    {tech}
+                  </span>
+                ))}
+                {project.technologies.length > 2 && (
+                  <span className="text-xs bg-blue-900/50 text-blue-300 px-2 py-1 rounded-full">
+                    +{project.technologies.length - 2}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Hover overlay effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-900/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+      </div>
+    ))}
+  </div>
+</div>
 
         {/* Messages */}
         <div className="glass-panel p-6 rounded-xl border border-blue-900/30 bg-gradient-to-br from-blue-900/20 to-black/40 backdrop-blur-sm shadow-lg">
